@@ -4,6 +4,7 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+# Function to perform the Monte Carlo simulation for option pricing
 def monte_carlo_option_pricer(stock_price, strike_price, time_to_maturity, risk_free_rate, volatility, num_simulations):
     dt = time_to_maturity / 365
     num_days = int(time_to_maturity)
@@ -22,8 +23,10 @@ def monte_carlo_option_pricer(stock_price, strike_price, time_to_maturity, risk_
     option_price = np.exp(-risk_free_rate * time_to_maturity) * np.mean(option_payoffs)
     return option_price
 
+# Function to calculate and display the option price distribution
 def calculate_option_price():
     try:
+        # Get input values from the user
         stock_price = float(stock_price_var.get())
         strike_price = float(strike_price_var.get())
         time_to_maturity = float(time_to_maturity_var.get())
@@ -49,6 +52,7 @@ def calculate_option_price():
         plt.grid(True)
         plt.tight_layout()
 
+        # Embed the chart in the Tkinter GUI
         canvas = FigureCanvasTkAgg(plt.gcf(), master=root)
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.grid(row=len(input_labels) + 2, columnspan=2)
@@ -56,9 +60,11 @@ def calculate_option_price():
     except ValueError:
         option_price_label.config(text="Invalid input. Please enter numeric values.")
 
+# Create the main Tkinter window
 root = tk.Tk()
 root.title("Monte Carlo Options Pricer")
 
+# Labels and entry fields for input parameters
 input_labels = ["Stock Price:", "Strike Price:", "Time to Maturity (years):", "Risk-Free Rate:", "Volatility:", "Number of Simulations:"]
 entry_vars = []
 
@@ -73,10 +79,13 @@ for row, (label_text, default_value) in enumerate(zip(input_labels, default_valu
 
 stock_price_var, strike_price_var, time_to_maturity_var, risk_free_rate_var, volatility_var, num_simulations_var = entry_vars
 
+# Button to calculate option price and display the distribution
 calculate_button = ttk.Button(root, text="Calculate", command=calculate_option_price)
 calculate_button.grid(row=len(input_labels), columnspan=2)
 
+# Label to display calculated option price
 option_price_label = ttk.Label(root, text="")
 option_price_label.grid(row=len(input_labels) + 1, columnspan=2)
 
+# Start the Tkinter main loop
 root.mainloop()
